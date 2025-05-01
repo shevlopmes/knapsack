@@ -30,7 +30,7 @@ init_array(N, [0|Tail]) :-
 
 
 
-next_state(Item, TotalWeight, N, Cap, NextItem, NextTotalWeight) :-
+next_state(Item, TotalWeight, Cap, NextItem, NextTotalWeight) :-
     (   TotalWeight < Cap ->
     		NextItem is Item,
         	NextTotalWeight is TotalWeight + 1;
@@ -41,11 +41,11 @@ dp_transition(Item, TotalWeight, DpTail, ForRecoveryT, DpRes, RecoveryRes, N, Ca
     (Item =:= N -> !, DpRes = DpTail, RecoveryRes = ForRecoveryT;
     nth0(Item, Weights, ConsiderWeight),
     nth0(Item, Values, ConsiderValue),
-    dp_step(Item, TotalWeight, ConsiderWeight, ConsiderValue, Cap, DpHead, ForRecoveryH, DpTail),
-    next_state(Item, TotalWeight, N, Cap, NextItem, NextTotalWeight),
+    dp_step(TotalWeight, ConsiderWeight, ConsiderValue, Cap, DpHead, ForRecoveryH, DpTail),
+    next_state(Item, TotalWeight, Cap, NextItem, NextTotalWeight),
     dp_transition(NextItem, NextTotalWeight, [DpHead|DpTail], [ForRecoveryH|ForRecoveryT], DpRes, RecoveryRes, N, Cap, Weights, Values)).
 
-dp_step(Item, TotalWeight, ConsiderWeight, ConsiderValue, Cap, OptimalValue, Take, Dp) :-
+dp_step(TotalWeight, ConsiderWeight, ConsiderValue, Cap, OptimalValue, Take, Dp) :-
 
     (ConsiderWeight =< TotalWeight ->
     nth0(Cap, Dp, ValueNotTake),
@@ -87,7 +87,7 @@ solve(N, Cap, Weights, Values, OptimalValue, Items) :-
     N1 is N - 1,
     recover(N1, 0, Recovery, Weights, [], Items, Cap).
 
-main :-
+userinput :-
     welcome,
     read_int(N, 'Please enter the number of items.'),
     read_int(Cap, 'Please enter the capacity of a knapsack.'),
@@ -172,3 +172,12 @@ test_data(5, N, Cap, Weights, Values, Optimal) :-
     Weights = [9, 17, 20, 14, 7, 18, 7, 10, 13, 12, 15, 17, 15, 4, 8, 8, 3, 11, 1, 19, 18, 8, 19, 8, 1, 3, 2, 8, 3, 2, 11, 3, 17, 8, 9, 16, 7, 18, 5, 19, 19, 16, 8, 16, 14, 7, 4, 4, 14, 12],
     Values = [55, 53, 60, 94, 7, 87, 84, 83, 13, 8, 52, 94, 44, 14, 32, 25, 25, 69, 58, 18, 55, 24, 36, 60, 32, 10, 57, 71, 13, 7, 84, 70, 2, 12, 97, 31, 22, 53, 63, 62, 28, 52, 8, 22, 49, 1, 50, 34, 59, 37],
     Optimal = 1420.
+
+main(Args) :-
+    (Args = [test] ->
+        test
+    ; Args = [main] ->
+        userinput
+    ; write('Unknown argument.'), nl).
+
+:- initialization(main, main).
