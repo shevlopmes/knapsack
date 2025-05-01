@@ -1,6 +1,6 @@
 If you're using SWI-Prolog:
 
-In command line write swipl -s main.pl -- main  (this will run an app with argument "main" which triggers the default mode)/
+In command line write swipl -s main.pl -- main  (this will run an app with argument "main" which triggers the default mode)
 
 There's an interface for tests on some pre-determined data. For it you should write swipl -s main.pl -- test
 
