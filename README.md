@@ -1,3 +1,13 @@
-To use this program, write ?-main. and follow instructions
+If you're using SWI-Prolog:
 
-Also there is a method ?-test. to test a solution on some pre-determined cases.
+In command line write swipl -s main.pl -- main  (this will run an app with argument "main" which triggers the default mode)/
+
+There's an interface for tests on some pre-determined data. For it you should write swipl -s main.pl -- test
+
+If you're using GNU Prolog:
+
+write gprolog --consult-file main.pl
+
+Then for default mode make a query ?- userinput.
+
+For tests make a query ?- test.
